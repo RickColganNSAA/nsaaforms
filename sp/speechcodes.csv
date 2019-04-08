@@ -1,0 +1,308 @@
+01,A,Bellevue East
+02,A,Bellevue West
+03,A,Columbus
+04,A,Elkhorn
+05,A,Fremont
+06,A,Grand Island
+07,A,Hastings
+08,A,Kearney
+09,A,Lexington
+10,A,Lincoln East
+11,A,Lincoln High
+12,A,Lincoln North Star
+13,A,Lincoln Northeast
+14,A,Lincoln Pius X
+15,A,Lincoln Southeast
+16,A,Lincoln Southwest
+17,A,Millard North
+18,A,Millard South
+19,A,Millard West
+20,A,Norfolk
+21,A,North Platte
+22,A,Omaha Bryan
+23,A,Omaha Burke
+24,A,Omaha Central
+25,A,Omaha Creighton Prep
+26,A,Omaha South
+27,A,Omaha Westside
+28,A,Papillion-LaVista
+29,A,Papillion-LaVista South
+30,A,Ralston
+31,A,Scottsbluff
+32,A,South Sioux City
+01,B,Adams Central
+2,B,Alliance
+3,B,Ashland-Greenwood
+4,B,Auburn
+5,B,Aurora
+6,B,Beatrice
+7,B,Blair
+8,B,Boone Central
+9,B,Broken Bow
+10,B,Central City
+11,B,Chadron
+12,B,Columbus Lakeview
+13,B,Columbus Scotus
+14,B,Cozad
+15,B,Crete
+16,B,Fairbury
+17,B,Falls City
+18,B,Gering
+19,B,Grand Island Northwest
+20,B,Gretna
+21,B,Holdrege
+22,B,Logan View
+23,B,Madison
+24,B,McCook
+25,B,Minden
+26,B,Nebraska City
+27,B,Norris
+28,B,Ogallala
+29,B,Omaha Duchesne Academy
+30,B,Omaha Gross Catholic
+31,B,Omaha Marian
+32,B,Omaha Mercy
+33,B,Omaha Roncalli Catholic
+34,B,Omaha Skutt Catholic
+35,B,O'Neill
+36,B,Pierce
+37,B,Platteview
+38,B,Plattsmouth/Conestoga
+39,B,Raymond Central
+40,B,Schuyler
+41,B,Seward
+42,B,Sidney
+43,B,Valentine
+44,B,Valley
+45,B,Wahoo
+46,B,Waverly
+47,B,Wayne
+48,B,York
+01,C1,Ainsworth
+02,C1,Aquinas
+03,C1,Arlington
+04,C1,Battle Creek
+05,C1,Bayard
+06,C1,Bennington
+07,C1,Bishop Neumann
+08,C1,Bridgeport
+09,C1,Centennial
+10,C1,Centura
+11,C1,Chase County
+12,C1,Creighton
+13,C1,Crofton
+14,C1,David City
+15,C1,Doniphan-Trumbull
+16,C1,Elkhorn Valley
+17,C1,Fillmore Central
+18,C1,Fort Calhoun
+19,C1,Gibbon
+20,C1,Gordon
+21,C1,Gothenburg
+22,C1,Grand Island Central Catholic
+23,C1,Hartington Cedar Catholic
+24,C1,Hershey
+25,C1,Kearney Catholic
+26,C1,Kimball
+27,C1,Lincoln Christian
+28,C1,Lincoln Lutheran
+29,C1,Louisville
+30,C1,Malcolm
+31,C1,Milford
+32,C1,Mitchell
+33,C1,Mount Michael Benedictine
+34,C1,Neligh-Oakdale
+35,C1,Norfolk Catholic
+36,C1,North Bend Central
+37,C1,Oakland-Craig
+38,C1,Ord
+39,C1,Plainview
+40,C1,Randolph
+41,C1,Ravenna
+42,C1,Southern
+43,C1,St. Paul
+44,C1,Stanton
+45,C1,Superior
+46,C1,Syracuse
+47,C1,Tecumseh
+48,C1,Tekamah-Herman
+49,C1,Thayer Central
+50,C1,Twin River
+51,C1,West Holt
+52,C1,West Point
+53,C1,West Point Central Catholic
+54,C1,Wilber-Clatonia
+55,C1,Wisner-Pilger
+56,C1,Wood River
+01,C2,Alma
+02,C2,Arapahoe
+03,C2,Archbishop Bergan
+04,C2,Bancroft-Rosalie
+05,C2,Blue Hill
+06,C2,Burwell
+07,C2,Cambridge
+08,C2,Cross County
+09,C2,Deshler
+10,C2,Diller-Odell
+11,C2,East Butler
+12,C2,Elm Creek
+13,C2,Elmwood-Murdock
+14,C2,Elwood
+15,C2,Emerson-Hubbard
+16,C2,Exeter-Milligan
+17,C2,Franklin
+18,C2,Friend
+19,C2,Fullerton
+20,C2,Garden County
+21,C2,Grant
+22,C2,Hartington
+23,C2,Harvard
+24,C2,Hemingford
+25,C2,Homer
+26,C2,Howells
+27,C2,Humboldt-Table Rock-Steinauer
+28,C2,Humphrey St. Francis
+29,C2,Laurel-Concord
+30,C2,Lawrence-Nelson
+31,C2,Leigh
+32,C2,Loup City
+33,C2,Lourdes Central Catholic
+34,C2,Lutheran High Northeast
+35,C2,Lyons-Decatur Northeast
+36,C2,Morrill
+37,C2,Nebraska Christian
+38,C2,Nebraska Lutheran
+39,C2,Newman Grove
+40,C2,North Platte St. Patrick's
+41,C2,Omaha Brownell-Talbot
+42,C2,Osmond
+43,C2,Overton
+44,C2,Palmyra
+45,C2,Ponca
+46,C2,Sandy Creek
+47,C2,Scribner-Snyder
+48,C2,Shelton
+49,C2,Silver Lake
+50,C2,Southern Valley
+51,C2,Sutherland
+52,C2,Sutton
+53,C2,Wakefield
+54,C2,Weeping Water
+55,C2,Wilcox-Hildreth
+56,C2,Winnebago
+57,C2,Yutan
+01,D1,Amherst
+02,D1,Anselmo-Merna
+03,D1,Arnold
+04,D1,Axtell
+05,D1,Bertrand
+06,D1,Bloomfield
+07,D1,Bruning-Davenport
+08,D1,Callaway
+09,D1,Cedar Bluffs
+10,D1,Cedar Rapids
+11,D1,Chappell
+12,D1,Clarkson
+13,D1,Clay Center
+14,D1,Cody-Kilgore
+15,D1,Coleridge
+16,D1,Crawford
+17,D1,Dodge
+18,D1,Dundy County
+19,D1,Elgin
+20,D1,Eustis-Farnam
+21,D1,Ewing
+22,D1,Falls City Sacred Heart
+23,D1,Freeman
+24,D1,Giltner
+25,D1,High Plains Community
+26,D1,Hyannis
+27,D1,Johnson-Brock
+28,D1,Kenesaw
+29,D1,Lewiston
+30,D1,Leyton
+31,D1,Maxwell
+32,D1,Mead
+33,D1,Meridian
+34,D1,Minatare
+35,D1,Omaha Christian Academy
+36,D1,Orchard
+37,D1,Osceola
+38,D1,Palmer
+39,D1,Pawnee City
+40,D1,Paxton
+41,D1,Pleasanton
+42,D1,Pope John
+43,D1,Potter-Dix
+44,D1,Red Cloud
+45,D1,Republican Valley
+46,D1,Rising City
+47,D1,Rock County
+48,D1,Rushville
+49,D1,Shelby
+50,D1,South Platte
+51,D1,Southeast NE Consolidated
+52,D1,Spalding/Spalding Academy
+53,D1,Spencer-Naper
+54,D1,Stuart
+55,D1,Waterloo
+56,D1,Wauneta-Palisade
+57,D1,Wausa
+58,D1,Winside
+01,D2,Allen
+02,D2,Ansley
+03,D2,Arcadia
+04,D2,Arthur County
+05,D2,Banner County
+06,D2,Brady
+07,D2,Butte
+08,D2,Chambers
+09,D2,Clearwater
+10,D2,Concordia
+11,D2,Culbertson
+12,D2,Dawson-Verdon
+13,D2,Dorchester
+14,D2,Elba
+15,D2,Greeley
+16,D2,Hampton
+17,D2,Hay Springs
+18,D2,Hayes Center
+19,D2,Heartland Lutheran
+20,D2,Humphrey
+21,D2,Keya Paha County
+22,D2,Lakeside Central
+23,D2,Lindsay Holy Family
+24,D2,Litchfield
+25,D2,Lodgepole
+26,D2,Loomis
+27,D2,Loup County
+28,D2,Lynch
+29,D2,Maywood
+30,D2,McCool Junction
+31,D2,McPherson County
+32,D2,Mullen
+33,D2,Nemaha Valley
+34,D2,Newcastle
+35,D2,Niobrara
+36,D2,North Loup-Scotia
+37,D2,Parkview Christian
+38,D2,Prague
+39,D2,Sandhills
+40,D2,Santee
+41,D2,Sargent
+42,D2,Shickley
+43,D2,Sioux County
+44,D2,St. Edward
+45,D2,St. Mary's
+46,D2,Stapleton
+47,D2,Sterling
+48,D2,Sumner-Eddyville-Miller
+49,D2,Thedford
+50,D2,Twin Valley
+51,D2,Verdigre
+52,D2,Wallace
+53,D2,Walthill
+54,D2,Wheatland
+55,D2,Wheeler Central
+56,D2,Wolbach
+57,D2,Wynot

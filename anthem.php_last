@@ -1,0 +1,346 @@
+<?php
+//echo date('Y-m-d'); exit;
+require 'functions.php';
+require 'variables.php';
+
+$header=GetHeader($session);
+$level=GetLevel($session);
+
+//connect to db:
+$db=mysql_connect("$db_host",$db_user,$db_pass);
+mysql_select_db($db_name, $db);
+
+//verify user
+if(!ValidUser($session) || $level!=1)
+{
+   header("Location:index.php?error=3");
+   exit();
+}
+
+
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+	if (empty($_POST["school"])){
+	$schErr = "School name is required";
+	}
+	
+	if (!empty($_POST["school"])){
+	$sql2="SELECT school From anthem";
+    $result=mysql_query($sql2);
+	$resultArr = array();
+	while($row=mysql_fetch_array($result)){ 
+	$resultArr[]=$row[school]; } 
+	if (in_array($_POST["school"], $resultArr)) {
+    $schErr2 = "Already data inserted for this school";
+	}
+	}
+	
+	if (empty($_POST["sponsor"])){
+	$sponsorErr = "Field is required";
+	}
+	
+	if (empty($_POST["sport"])){
+	$sportErr = "Need to select a sport";
+	}
+
+	$id = $_POST["id"];
+	$name = $_POST["name"];
+	$email = $_POST["email"];
+	$grade = $_POST["grade"];
+	$sport = $_POST["sport"];
+	$school = $_POST["school"];
+	$sponsor = $_POST["sponsor"];
+	$session = $_POST["session"];
+	//$insert_date = date('Y-m-d');
+	$insert_date = date('Y-m-d');
+	
+    $singer = implode(",",$name);
+    $points = implode(",",$grade);
+    $date = implode(",",$sport);
+	
+	if(!empty($_FILES["music_file"]["name"])){
+	$music = rand().$_FILES["music_file"]["name"];
+	$target_dir = "/data/public_html/nsaaforms/anthem/";
+	//$target_dir = "D:xampp/htdocs/nsaaforms/anthem/";
+	$target_file = $target_dir . basename($music);
+	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+	move_uploaded_file($_FILES["music_file"]["tmp_name"], $target_file);
+	}else{
+	if(!$id){
+	$musicErr = 'Music file is required';
+	}
+	}
+
+    if (($imageFileType != 'mp3') && ($imageFileType != 'mp4')){
+	$musicErr = 'Upload mp3 or mp4 file';
+	}
+	
+	
+	if ($id) {
+	if((!empty($_POST["school"])) && (!empty($_POST["sponsor"])) && (!empty($_POST["sport"])) ){
+	$sql="UPDATE anthem SET school='$school',name='$singer',email='$email',grade='$points',sport='$date',sponsor='$sponsor' WHERE id='$id'";
+    $result=mysql_query($sql);
+	
+	if (!empty($_FILES["music_file"]["name"])){
+	$sql1="UPDATE anthem SET music_file='$music' WHERE id='$id'";
+    $result=mysql_query($sql1);
+	}
+	
+	if (!empty($_FILES["name_file"]["name"])){
+	// $sql1="UPDATE anthem SET name_file='$list' WHERE id='$id'";
+    // $result=mysql_query($sql1);
+	$name = array();
+	$grade = array();
+	$handle = fopen($_FILES['name_file']['tmp_name'], "r");
+	while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+         $name[] = $data[0];
+		 $grade[] = $data[1];
+    }
+	fclose($handle);
+	$singer = implode(",",$name);
+    $points = implode(",",$grade);
+	
+	$sql="UPDATE anthem SET name='$singer',grade='$points' WHERE id='$id'";
+    $result=mysql_query($sql);
+	
+	}
+	
+	header("Location:anthem_list.php?session=$session");
+	exit();
+	}
+	}else{
+	if((!empty($_POST["school"])) && (!empty($_POST["sponsor"])) && (!empty($_POST["sport"])) && (empty($musicErr)) && (empty($schErr2)) ){
+	$sql="INSERT INTO anthem (school,name,grade,sponsor,sport,music_file,email,date) VALUES ('$school','$singer','$points','$sponsor','$date','$music','$email','$insert_date')"; 
+    $result=mysql_query($sql);
+	$insert_id = mysql_insert_id();
+	if (!empty($_FILES["name_file"]["name"])){
+	$name = array();
+	$grade = array();
+	$handle = fopen($_FILES['name_file']['tmp_name'], "r");
+	while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+         $name[] = $data[0];
+		 $grade[] = $data[1];
+    }
+	fclose($handle);
+	$singer = implode(",",$name);
+    $points = implode(",",$grade);
+	
+	$sql="UPDATE anthem SET name='$singer',grade='$points' WHERE id='$insert_id'";
+    $result=mysql_query($sql);
+	
+	}
+    header("Location:anthem_list.php?session=".$session);
+	exit();
+	}
+	}
+
+ }
+ if (isset($_GET['id'])) {
+
+   $sql="SELECT * FROM anthem WHERE id =$_GET[id]";
+   $result=mysql_query($sql);
+   $row=mysql_fetch_array($result); 
+   $sponsor =$row[sponsor];
+   $singer =$row[name];
+   $point =$row[grade];
+   $date =$row[sport];
+   $school =$row[school];
+   $email =$row[email];
+   $id =$row[id];
+   $music_file =$row [music_file];
+   $name = explode(",",$singer);
+   $grade = explode(",",$point);
+   $sport = explode(",",$date);
+   //echo '<pre>';print_r($date); exit;
+
+}
+
+
+
+ echo $init_html;
+ echo $header;
+
+
+//echo $end_html;
+?>
+<form method="post" action="anthem.php" enctype="multipart/form-data">
+   <br>
+   <h3>NATIONAL ANTHEM SINGERS, 2016-17 NSAA CHAMPIONSHIPS</h3>
+   <?php echo 'School'; ?>
+   <select name="school">
+   <option value="">Select School</option>
+   <?php
+   $sql="SELECT school FROM headers ORDER BY school";
+   $result=mysql_query($sql);
+   while($row=mysql_fetch_array($result))
+   {
+   ?>
+    <option value="<?php echo $row[school]; ?>"<?php if ($row[school]==$school) echo 'selected';?>><?php echo $row[school]; ?></option>
+	
+   <?php } ?> 
+   
+   </select><span style="color:red"><?php echo $schErr; ?></span><span style="color:red"><?php echo $schErr2; ?></span></br></br>
+   Email Address: <input type="email" name="email" value="<?php echo $email;?>" placeholder="email"><br><br>
+   <b>STUDENT(S) PERFORMING / YEAR IN SCHOOL:</b>
+   </br></br>
+  &nbsp&nbsp<b>1)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[0];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[0];?>" placeholder="Grade" style="width:10%">
+  &nbsp&nbsp<b>2)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[1];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[1];?>" placeholder="Grade" style="width:10%"><br><br>
+  &nbsp&nbsp<b>3)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[2];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[2];?>" placeholder="Grade" style="width:10%">
+  &nbsp&nbsp<b>4)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[3];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[3];?>" placeholder="Grade" style="width:10%"><br><br>
+  &nbsp&nbsp<b>5)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[4];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[4];?>" placeholder="Grade" style="width:10%">
+  &nbsp&nbsp<b>6)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[5];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[5];?>" placeholder="Grade" style="width:10%"><br><br>
+  &nbsp&nbsp<b>7)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[6];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[6];?>" placeholder="Grade" style="width:10%">
+  &nbsp&nbsp<b>8)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[7];?>" placeholder="Name" style="width:18%">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[7];?>" placeholder="Grade" style="width:10%"><br><br>
+  SCHOOL MUSIC DIRECTOR SPONSOR: <input type="text" name="sponsor" value="<?php echo $sponsor;?>"><span style="color:red"><?php echo $sponsorErr; ?></span><br><br>
+  Music File: <input type="file" name="music_file" accept="image/*"><span style="color:red"><?php echo $musicErr; ?></span><br><br>
+  <?php if ($music_file){?>
+  <audio controls>
+   <source src="anthem/<?php echo $music_file;?>" type="audio/mp4">
+   <source src="anthem/<?php echo $music_file;?>" type="audio/mp3">
+   </audio><br><br>
+  <?php } ?>
+  Name list: <input type="file" name="name_file" accept=".csv,.txt, application/vnd.ms-excel"><br><br>
+  <b>PLEASE SELECT THE EVENTS YOU ARE AVAILABLE TO SING FOR:</b><br><br><span style="color:red"><?php echo $sportErr; ?></span><br><br>
+  <input type="checkbox" name="sport[]" value="1" <?php if(in_array(1,$sport)) echo 'checked';?>> NSAA CROSS COUNTRY CHAMPIONSHIPS October 21, 2016, Kearney<br><br>
+  <input type="checkbox" name="sport[]" value="2" <?php if(in_array(2,$sport)) echo 'checked';?>> NSAA VOLLEYBALL CHAMPIONSHIP FINALS November 11 & 12, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="3" <?php if(in_array(3,$sport)) echo 'checked';?>> NSAA FOOTBALL CHAMPIONSHIP FINALS November 21 & 22, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="4" <?php if(in_array(4,$sport)) echo 'checked';?>> NSAA WRESTLING CHAMPIONSHIPS February 16, 17, & 18, 2017, Omaha<br><br>
+  <input type="checkbox" name="sport[]" value="5" <?php if(in_array(5,$sport)) echo 'checked';?>> NSAA SWIMMING & DIVING CHAMPIONSHIP FINALS Feb. 23, 24 & 25, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="6" <?php if(in_array(6,$sport)) echo 'checked';?>> NSAA DUAL WRESTLING CHAMPIONSHIPS February 25, Kearney<br><br>
+  <input type="checkbox" name="sport[]" value="7" <?php if(in_array(7,$sport)) echo 'checked';?>> NSAA GIRLS BASKETBALL CHAMPIONSHIP FINALS March 4, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="8" <?php if(in_array(8,$sport)) echo 'checked';?>> NSAA BOYS BASKETBALL CHAMPIONSHIP FINALS March 11, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="9" <?php if(in_array(9,$sport)) echo 'checked';?>> NSAA SOCCER CHAMPIONSHIP FINALS May 15 & 16, Omaha<br><br>
+  <input type="checkbox" name="sport[]" value="10" <?php if(in_array(10,$sport)) echo 'checked';?>> NSAA BOYS BASEBALL CHAMPIONSHIP FINALS May 18, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="11" <?php if(in_array(11,$sport)) echo 'checked';?>> NSAA TRACK & FIELD CHAMPIONSHIPS May 19 & 20, Omaha<br><br>
+  <input type="hidden" name="id" value="<?php echo $id;?>">
+  <input type="submit" value="Submit" id="submit">
+  <input type="hidden" name="session" value="<?php echo $session; ?>" >
+</form>
+
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.form.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+	var options = { 
+			target:   '#output',   // target element(s) to be updated with server response 
+			beforeSubmit:  beforeSubmit,  // pre-submit callback 
+			success:       afterSuccess,  // post-submit callback 
+			uploadProgress: OnProgress, //upload progress callback 
+			resetForm: true        // reset the form after successful submit 
+		}; 
+		
+	 $('#MyUploadForm').submit(function() { 
+			$(this).ajaxSubmit(options);  			
+			// always return false to prevent standard browser submit and page navigation 
+			return false; 
+		}); 
+		
+
+//function after succesful file upload (when server response)
+function afterSuccess()
+{
+	$('#submit-btn').show(); //hide submit button
+	$('#loading-img').hide(); //hide submit button
+	$('#progressbox').delay( 1000 ).fadeOut(); //hide progress bar
+
+}
+
+//function to check file size before uploading.
+function beforeSubmit(){
+    //check whether browser fully supports all File API
+   if (window.File && window.FileReader && window.FileList && window.Blob)
+	{
+		
+		if( !$('#FileInput').val()) //check empty input filed
+		{
+			$("#output").html("Are you kidding me?");
+			return false
+		}
+		
+		var fsize = $('#FileInput')[0].files[0].size; //get file size
+		var ftype = $('#FileInput')[0].files[0].type; // get file type
+		
+
+		//allow file types 
+		switch(ftype)
+        {
+            case 'image/png': 
+			case 'image/gif': 
+			case 'image/jpeg': 
+			case 'image/pjpeg':
+			case 'text/plain':
+			case 'text/html':
+			case 'application/x-zip-compressed':
+			case 'application/pdf':
+			case 'application/msword':
+			case 'application/vnd.ms-excel':
+			case 'video/mp4':
+			case 'video/x-ms-wmv':
+                break;
+            default:
+                $("#output").html("<b>"+ftype+"</b> Unsupported file type!");
+				return false
+        }
+		
+		//Allowed file size is less than 5 MB (1048576)
+		if(fsize>52428800) 
+		{
+			$("#output").html("<b>"+bytesToSize(fsize) +"</b> Too big file! <br />File is too big, it should be less than 5 MB.");
+			return false
+		}
+				
+		$('#submit-btn').hide(); //hide submit button
+		$('#loading-img').show(); //hide submit button
+		$("#output").html("");  
+	}
+	else
+	{
+		//Output error to older unsupported browsers that doesn't support HTML5 File API
+		$("#output").html("Please upgrade your browser, because your current browser lacks some new features we need!");
+		return false;
+	}
+}
+
+//progress bar function
+function OnProgress(event, position, total, percentComplete)
+{
+    //Progress bar
+	$('#progressbox').show();
+    $('#progressbar').width(percentComplete + '%') //update progressbar percent complete
+    $('#statustxt').html(percentComplete + '%'); //update status text
+    if(percentComplete>50)
+        {
+            $('#statustxt').css('color','#000'); //change status text to white after 50%
+        }
+}
+
+//function to format bites bit.ly/19yoIPO
+function bytesToSize(bytes) {
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+   if (bytes == 0) return '0 Bytes';
+   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+}); 
+
+</script>
+<!--<link href="style/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="upload-wrapper">
+<div align="center">
+<h3>Ajax File Uploader</h3>
+<form action="processupload.php" method="post" enctype="multipart/form-data" id="MyUploadForm">
+<input name="FileInput" id="FileInput" type="file" />
+<input type="submit"  id="submit-btn" value="Upload" />
+<img src="images/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
+</form>
+<div id="progressbox" ><div id="progressbar"></div ><div id="statustxt">0%</div></div>
+<div id="output"></div>
+</div>
+</div>
+
+</body>
+</html>-->

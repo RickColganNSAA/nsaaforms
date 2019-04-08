@@ -1,0 +1,126 @@
+<?php
+
+require 'functions.php';
+require 'variables.php';
+
+$header=GetHeader($session);
+$level=GetLevel($session);
+
+//connect to db:
+$db=mysql_connect("$db_host",$db_user,$db_pass);
+mysql_select_db($db_name, $db);
+
+//verify user
+// if(!ValidUser($session) || $level!=1)
+// {
+   // header("Location:index.php?error=1");
+   // exit();
+// }
+
+ $sql="SELECT * FROM anthem ORDER BY school";
+ $result=mysql_query($sql);
+     $list_data = array();
+ 	while($row=mysql_fetch_array($result)){ 
+	$list_data[]= $row;	 } 
+
+ 
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_POST['school']){
+    $sql="SELECT * From anthem WHERE school='$_POST[school]'";
+    $search_result=mysql_query($sql);
+    }
+  }
+  if($_GET['file']){
+	header('Content-Type: text/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename=data.csv');
+	$output = fopen('php://output', 'w');
+	fputcsv($output, array('School Name'));
+    $rows = mysql_query('SELECT school FROM anthem');
+    while ($row = mysql_fetch_assoc($rows)) 
+	fputcsv($output, $row);  exit;
+  }
+	
+
+
+echo $init_html;
+echo $header;
+
+
+//echo $end_html;
+?>
+<style>
+ul {background-color:white;width:100px; border:1px}
+ul li {list-style:none; background-color:white;border:1px}
+</style>
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<br>
+<h3>NATIONAL ANTHEM SINGERS, 2016-17 NSAA CHAMPIONSHIPS</h3>
+<a href="anthem.php?session=<?php echo $session;?>">Add New School</a><br><br>
+<a href="anthem_remaining.php?session=<?php echo $session;?>">Remaining Schools</a>
+<br><br>
+<form method="post" action="anthem_list.php?session=<?php echo $session;?>" enctype="multipart/form-data">
+<div class="ui-widget">
+  <label for="tags">Search School Name: </label>
+  <input type="text" name="school" id="tags">
+  <input type="submit" value="search">
+</div>
+</form>
+
+<a href="anthem_list.php?session=<?php echo $session;?>&file=remaining"><div>Export school name</div></a><br>
+<table border='1' style="width:60%">
+<th>School</th>
+<th>Email</th>
+<th>Sponsor</th>
+<th>Music file</th>
+<th>Action</th>
+<?php
+while($row=mysql_fetch_array($search_result)){
+?>
+<tr>
+<td><?php echo $row[school];?></td>
+<td><?php echo $row[email];?></td>
+<td><?php echo $row[sponsor];?></td>
+<td ><audio controls>
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp4">
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp3">
+Your browser does not support the audio element.
+</audio></td>
+<td><a href="anthem.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>">Edit</a> 
+    <a href="anthem_delete.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></td>
+
+<tr>
+<?php } ?>
+<?php
+if (empty($search_result)){
+//while($row=mysql_fetch_array($result)){
+foreach ($list_data as $row){
+?>
+<tr>
+<td><?php echo $row[school];?></td>
+<td><?php echo $row[email];?></td>
+<td><?php echo $row[sponsor];?></td>
+<td ><audio controls>
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp4">
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp3">
+Your browser does not support the audio element.
+</audio></td>
+<td><a href="anthem.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>">Edit</a> 
+    <a href="anthem_delete.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></td>
+
+<tr>
+<?php }} ?>
+</table>
+  <script>
+  $( function() {
+    var availableTags = [
+<?php  
+foreach ($list_data as $row){ echo '"'.$row[school].'",';}
+?>
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  } );
+
+  </script>

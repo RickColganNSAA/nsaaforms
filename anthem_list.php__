@@ -1,0 +1,64 @@
+<style>
+
+</style>
+<?php
+
+require 'functions.php';
+require 'variables.php';
+
+$header=GetHeader($session);
+$level=GetLevel($session);
+
+//connect to db:
+$db=mysql_connect("$db_host",$db_user,$db_pass);
+mysql_select_db($db_name, $db);
+
+ $sql="SELECT * FROM anthem ORDER BY school";
+   $result=mysql_query($sql);
+   //$row=mysql_fetch_array($result);
+   
+   //echo '<pre>';print_r($row); exit;
+	
+//verify user
+// if(!ValidUser($session) || $level!=1)
+// {
+   // header("Location:index.php?error=1");
+   // exit();
+// }
+
+echo $init_html;
+echo $header;
+
+
+//echo $end_html;
+?>
+<br>
+<h3>NATIONAL ANTHEM SINGERS, 2016-17 NSAA CHAMPIONSHIPS</h3>
+<br>
+<a href="anthem.php?session=<?php echo $session;?>">Add New School</a>
+<br>
+<br>
+<table border='1' style="width:60%">
+<th>School</th>
+<th>Name</th>
+<th>Sponsor</th>
+<th>Music file</th>
+<th>Action</th>
+<?php
+while($row=mysql_fetch_array($result)){
+?>
+<tr>
+<td><?php echo $row[school];?></td>
+<td><?php echo $row[name];?></td>
+<td><?php echo $row[sponsor];?></td>
+<td ><audio controls>
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp4">
+   <source src="anthem/<?php echo $row[music_file];?>" type="audio/mp3">
+Your browser does not support the audio element.
+</audio></td>
+<td><a href="anthem.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>">Edit</a> 
+    <a href="anthem_delete.php?id=<?php echo $row[id]?>&session=<?php echo $session; ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></td>
+
+<tr>
+<?php } ?>
+</table>
