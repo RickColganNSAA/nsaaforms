@@ -572,9 +572,28 @@ if($print==1)
 }
 else
 {
-echo "<p>School District No. <input type=text size=3 name=\"dist1\" id=\"dist1\" value=\"$app[dist1]\" onBlur=\"document.getElementById('distnum').value=this.value; document.getElementById('distnum2').value=this.value;\"";
+// echo "<p>School District No. <input type=text size=3 name=\"dist1\" id=\"dist1\" value=\"$app[dist1]\" onBlur=\"document.getElementById('distnum').value=this.value; document.getElementById('distnum2').value=this.value;\"";
+// putting in the dropbox for the first school here
+    $ix = 1;
+    $distvar="dist".$ix; $schvar="schoolid".$ix;
+    echo "<p>School District No. <input type=text size=3 name=\"$distvar\" id=\"$distvar\" value=\"".$app[$distvar]."\"";
+    if($highlighterrors==1 && $app[$distvar]==0 && $app[$schvar]>0) echo " style=\"background-color:#ff0000;color:#ffffff;\"";
+    echo ">, <select name=\"$schvar\"><option value=\"0\">Select School</option>";
+    for($i=0;$i<count($schools[id]);$i++)
+    {
+        echo "<option value=\"".$schools[id][$i]."\"";
+        if($app[$schvar]==$schools[id][$i]) echo " selected";
+        echo ">".$schools[name][$i]."</option>";
+    }
+    echo "</select>, Nebraska";
+    if($ix==4) echo ".";
+    else echo " and";
+    echo "</p>";
+
+// end the dropbox for the first school here
+
 if($highlighterrors==1 && $app[dist1]==0) echo " style=\"background-color:#ff0000;color:#ffffff;\"";
-echo ">, <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$school&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, Nebraska and</p>";
+// echo ">, <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$school&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, Nebraska and</p>";
 	//Other Schools
 for($ix=2;$ix<=4;$ix++)
 {
@@ -642,7 +661,7 @@ echo "> $year2-$year3</li>
         if($app[year2]==$year3) echo " checked";
 	if($print==1) echo " disabled";
 echo "> $year3-$year4</li>
-	(Check all school years to be covered.)</ul></p>";
+	(Check all school years to be covered. Cooperative Sponsorship Agreements must be for a minimum of two years.)</ul></p>";
 echo "</li>";
 
 /***** BEGIN NEW FORM DIV - FOR NON-RENEWALS *****/
