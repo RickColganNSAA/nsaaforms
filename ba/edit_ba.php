@@ -381,7 +381,7 @@ if($level==1)
 }
 ?>
 <tr align=left>
-<td colspan=2><p>Check the box next to the name of each student who will be participating in the <?php echo $form_type; ?> competition.  Required fields for the district tournament are marked with a *.  <b>All fields are required for the state entry form.</b>  When your team qualifies for the state tournament, you must update this form with complete statistics on each player by 10 a.m. the morning after your team has qualified.  Players may be substituted on this team roster prior to district and between district and state at a school's discretion, provided no more than 20 players are in uniform.</p></td>
+<td colspan=2><p>Check the box next to the name of each student who will be participating in the <?php echo $form_type; ?> competition.  Required fields for the district tournament are marked with a *.  <b>All fields are required for the state entry form.</b>  When your team qualifies for the state tournament, you must update this form with complete statistics on each player by 10 a.m. the morning after your team has qualified.  Players may be substituted on this team roster prior to district and between district and state at a school's discretion, provided no more than 22 players are in uniform.</p></td>
 </tr>
    </table>
 </td>
