@@ -93,6 +93,8 @@ fabric.properties
 *.txt
 *.dat
 *.gif
+*.htm
+*.html
 vendor/
 attachments/
 believers/
