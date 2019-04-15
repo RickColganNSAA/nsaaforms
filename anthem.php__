@@ -1,0 +1,167 @@
+<?php
+
+require 'functions.php';
+require 'variables.php';
+
+$header=GetHeader($session);
+$level=GetLevel($session);
+
+//connect to db:
+$db=mysql_connect("$db_host",$db_user,$db_pass);
+mysql_select_db($db_name, $db);
+
+
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+	if (empty($_POST["school"])){
+	$schErr = "School name is required";
+	}
+	
+	if (empty($_POST["sponsor"])){
+	$sponsorErr = "Field is required";
+	}
+	
+	if (empty($_POST["sport"])){
+	$sportErr = "Need to select a sport";
+	}
+
+	$id = $_POST["id"];
+	$name = $_POST["name"];
+	$grade = $_POST["grade"];
+	$sport = $_POST["sport"];
+	$school = $_POST["school"];
+	$sponsor = $_POST["sponsor"];
+	$session = $_POST["session"];
+	
+    $singer = implode(",",$name);
+    $points = implode(",",$grade);
+    $date = implode(",",$sport);
+	
+	if(!empty($_FILES["music_file"]["name"])){
+	$music = $_FILES["music_file"]["name"];
+	$target_dir = "/data/public_html/nsaaforms/anthem/";
+	$target_file = $target_dir . basename($_FILES["music_file"]["name"]);
+	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+	move_uploaded_file($_FILES["music_file"]["tmp_name"], $target_file);
+	}else{
+	if(!$id){
+	$musicErr = 'Music file is required';
+	}
+	}
+
+    if (($imageFileType != 'mp3') && ($imageFileType != 'mp4')){
+	$musicErr = 'Upload mp3 or mp4 file';
+	}
+	
+	if(!empty($_FILES["name_file"]["name"])){
+	$list = $_FILES["name_file"]["name"];
+	$target_dir = "/data/public_html/nsaaforms/anthem/";
+	$target_file = $target_dir . basename($_FILES["name_file"]["name"]);
+	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+	move_uploaded_file($_FILES["name_file"]["tmp_name"], $target_file);
+	}
+	
+	if ($id) {
+	if((!empty($_POST["school"])) && (!empty($_POST["sponsor"])) && (!empty($_POST["sport"])) ){
+	$sql="UPDATE anthem SET school='$school',name='$singer',grade='$points',sport='$date',sponsor='$sponsor' WHERE id='$id'";
+    $result=mysql_query($sql);
+	
+	if (!empty($_FILES["music_file"]["name"])){
+	$sql1="UPDATE anthem SET music_file='$music' WHERE id='$id'";
+    $result=mysql_query($sql1);
+	}
+	
+	if (!empty($_FILES["name_file"]["name"])){
+	$sql1="UPDATE anthem SET name_file='$list' WHERE id='$id'";
+    $result=mysql_query($sql1);
+	}
+	
+	header("Location:anthem_list.php?session=$session");
+	exit();
+	}
+	}else{
+	if((!empty($_POST["school"])) && (!empty($_POST["sponsor"])) && (!empty($_POST["sport"])) && (empty($musicErr)) ){
+	$sql="INSERT INTO anthem (school,name,grade,sponsor,sport,music_file,name_file) VALUES ('$school','$singer','$points','$sponsor','$date','$music','$list')";
+    $result=mysql_query($sql);
+    header("Location:anthem_list.php?session=".$session);
+	exit();
+	}
+	}
+
+ }
+ if (isset($_GET['id'])) {
+
+   $sql="SELECT * FROM anthem WHERE id =$_GET[id]";
+   $result=mysql_query($sql);
+   $row=mysql_fetch_array($result);
+   $sponsor =$row[sponsor];
+   $singer =$row[name];
+   $point =$row[grade];
+   $date =$row[sport];
+   $school =$row[school];
+   $id =$row[id];
+   $name = explode(",",$singer);
+   $grade = explode(",",$point);
+   $sport = explode(",",$date);
+   //echo '<pre>';print_r($date); exit;
+
+}
+//verify user
+// if(!ValidUser($session) || $level!=1)
+// {
+   // header("Location:index.php?error=3");
+   // exit();
+// }
+
+ echo $init_html;
+ echo $header;
+
+
+//echo $end_html;
+?>
+<form method="post" action="anthem.php" enctype="multipart/form-data">
+   <br>
+   <h3>NATIONAL ANTHEM SINGERS, 2016-17 NSAA CHAMPIONSHIPS</h3>
+   <?php echo $schErr; ?>
+   <select name="school">
+   <option value="">Select School</option>
+   <?php
+   $sql="SELECT school FROM headers ORDER BY school";
+   $result=mysql_query($sql);
+   while($row=mysql_fetch_array($result))
+   {
+   ?>
+    <option value="<?php echo $row[school]; ?>"<?php if ($row[school]==$school) echo 'selected';?>><?php echo $row[school]; ?></option>
+	
+   <?php } ?>
+   
+   </select><span style="color:red"><?php echo $schErr; ?></span></br></br>
+   <b>STUDENT(S) PERFORMING / YEAR IN SCHOOL:</b>
+   </br></br>
+  &nbsp&nbsp<b>1)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[0];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[0];?>" placeholder="Grade">
+  &nbsp&nbsp<b>2)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[1];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[1];?>" placeholder="Grade"><br><br>
+  &nbsp&nbsp<b>3)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[2];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[2];?>" placeholder="Grade">
+  &nbsp&nbsp<b>4)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[3];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[3];?>" placeholder="Grade"><br><br>
+  &nbsp&nbsp<b>5)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[4];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[4];?>" placeholder="Grade">
+  &nbsp&nbsp<b>6)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[5];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[5];?>" placeholder="Grade"><br><br>
+  &nbsp&nbsp<b>7)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[6];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[6];?>" placeholder="Grade">
+  &nbsp&nbsp<b>8)</b>&nbsp <input type="text" name="name[]" value="<?php echo $name[7];?>" placeholder="Name">&nbsp&nbsp<input type="text" name="grade[]" value="<?php echo $grade[7];?>" placeholder="Grade"><br><br>
+  SCHOOL MUSIC DIRECTOR SPONSOR: <input type="text" name="sponsor" value="<?php echo $sponsor;?>"><span style="color:red"><?php echo $sponsorErr; ?></span><br><br>
+  Music File: <input type="file" name="music_file" accept="image/*"><span style="color:red"><?php echo $musicErr; ?></span><br><br>
+  Name list: <input type="file" name="name_file" accept="image/*"><br><br>
+  <b>PLEASE SELECT THE EVENTS YOU ARE AVAILABLE TO SING FOR:</b><br><br><span style="color:red"><?php echo $sportErr; ?></span><br><br>
+  <input type="checkbox" name="sport[]" value="1" <?php if(in_array(1,$sport)) echo 'checked';?>> NSAA CROSS COUNTRY CHAMPIONSHIPS October 21, 2016, Kearney<br><br>
+  <input type="checkbox" name="sport[]" value="2" <?php if(in_array(2,$sport)) echo 'checked';?>> NSAA VOLLEYBALL CHAMPIONSHIP FINALS November 11 & 12, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="3" <?php if(in_array(3,$sport)) echo 'checked';?>> NSAA FOOTBALL CHAMPIONSHIP FINALS November 21 & 22, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="4" <?php if(in_array(4,$sport)) echo 'checked';?>> NSAA WRESTLING CHAMPIONSHIPS February 16, 17, & 18, 2017, Omaha<br><br>
+  <input type="checkbox" name="sport[]" value="5" <?php if(in_array(5,$sport)) echo 'checked';?>> NSAA SWIMMING & DIVING CHAMPIONSHIP FINALS Feb. 23, 24 & 25, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="6" <?php if(in_array(6,$sport)) echo 'checked';?>> NSAA DUAL WRESTLING CHAMPIONSHIPS February 25, Kearney<br><br>
+  <input type="checkbox" name="sport[]" value="7" <?php if(in_array(7,$sport)) echo 'checked';?>> NSAA GIRLS BASKETBALL CHAMPIONSHIP FINALS March 4, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="8" <?php if(in_array(8,$sport)) echo 'checked';?>> NSAA BOYS BASKETBALL CHAMPIONSHIP FINALS March 11, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="9" <?php if(in_array(9,$sport)) echo 'checked';?>> NSAA SOCCER CHAMPIONSHIP FINALS May 15 & 16, Omaha<br><br>
+  <input type="checkbox" name="sport[]" value="10" <?php if(in_array(10,$sport)) echo 'checked';?>> NSAA BOYS BASEBALL CHAMPIONSHIP FINALS May 18, Lincoln<br><br>
+  <input type="checkbox" name="sport[]" value="11" <?php if(in_array(11,$sport)) echo 'checked';?>> NSAA TRACK & FIELD CHAMPIONSHIPS May 19 & 20, Omaha<br><br>
+  <input type="hidden" name="id" value="<?php echo $id;?>">
+  <input type="submit" value="Submit" id="submit">
+  <input type="hidden" name="session" value="<?php echo $session; ?>" >
+</form>

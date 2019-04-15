@@ -1,0 +1,40 @@
+AjaxAC ChangeLog
+----------------
+
+2005-06-29 - Version 0.41
+
+ - Created ArithmeJax sample application
+ - Replaced JavaScript escape() with encodeURIComponent()
+ - Changed hook name generator to include __ in front of hookname due to IE6 compatibility error
+ - Removed redundant AjaxAC class and moved this functionality to AjaxACApplication class
+ - Updated all examples to reflect removal of main AjaxAC class
+
+
+2005-06-11 - Version 0.4
+
+ - Improved sendResponseData function to deal with multi dimensional PHP arrays
+ - Moved Widgets to a Widgets directory
+ - Created a Timer widget + associated code in core.js
+ - Added trim function to core.js
+ - Added delay function to core.js
+ - Added keycode fetch function to core.js
+ - Streamlined XMLHttpRequest generation code
+ - Added ability to handle events within widget code or to override from app
+ - Added ability for custom event function naming on widgets
+ - Removed listener/talker setup to replace with simple widget structure
+ - Implemented GoogleSuggestClone
+ - Updated CountryCityRegionJax to deal with all changes
+
+
+2005-06-06 - Version 0.3.1
+
+ - Added function ajaxac_receivejsarray to core.js to receive raw JS
+ - Updated CountryCityRegionJax to use ajaxac_receivejsarray
+ - Added sendResponseData function to deal with return data to subrequests
+ - Updated CountryCityRegionJax to use sendResponseData for returning its JavaScript
+ - Added a few more locations in CountryCityRegionJax/locations.txt
+
+
+2005-06-02 - Version 0.3
+
+ - Initial public release
